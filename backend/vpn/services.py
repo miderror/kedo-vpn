@@ -76,12 +76,6 @@ class VpnService:
             client_uuid = str(subscription.vless_uuid)
 
             client_to_update = self.api.client.get_by_email(email)
-            if not client_to_update:
-                logger.info(
-                    f"VPN client for user {email} not found. Creating a new one."
-                )
-                return self.create_client(subscription)
-
             client_to_update.id = client_uuid
             client_to_update.enable = True
 
@@ -89,8 +83,6 @@ class VpnService:
 
             logger.info(f"Re-enabled existing VPN client for user {email}")
             return True
-        except Exception as e:
-            logger.error(
-                f"[VpnService] Failed to ensure client is active for user {email}: {e}"
-            )
-            return False
+        except Exception:
+            logger.info(f"VPN client for user {email} not found. Creating a new one.")
+            return self.create_client(subscription)
