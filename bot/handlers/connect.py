@@ -31,9 +31,9 @@ def get_vless_link(subscription: Subscription) -> str:
     uuid = subscription.vless_uuid
 
     return (
-        f"vless://{uuid}@{params['host']}:{params['port']}?type=tcp&security=reality"
+        f"vless://{uuid}@{params['host']}:{params['port']}?type=tcp&encryption=none&security=reality"
         f"&pbk={params['pbk']}&fp=chrome&sni={params['sni']}&sid={params['sid']}"
-        f"&spx=%2F&flow=xtls-rprx-vision#KEDOVPN-{user_id}"
+        f"&spx=%2F#KEDOVPN-{user_id}"
     )
 
 
