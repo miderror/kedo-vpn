@@ -1,0 +1,146 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: kedo_vpn_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ../.env
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  redis:
+    image: redis:7-alpine
+    container_name: kedo_vpn_redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    env_file:
+      - ../.env
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/python.prod.Dockerfile
+    container_name: kedo_vpn_backend
+    command: gunicorn backend.core.wsgi:application --bind 0.0.0.0:8000 --workers 2
+    volumes:
+      - static_volume:/app/backend/static
+      - media_volume:/app/backend/media
+    expose:
+      - 8000
+    env_file:
+      - ../.env
+    restart: always
+    environment:
+      - PYTHONPATH=/app
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  bot:
+    build:
+      context: ..
+      dockerfile: docker/python.prod.Dockerfile
+    container_name: kedo_vpn_bot
+    command: python bot/main.py
+    volumes:
+      - media_volume:/app/backend/media
+    env_file:
+      - ../.env
+    restart: always
+    environment:
+      - PYTHONPATH=/app
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  celery_worker:
+    build:
+      context: ..
+      dockerfile: docker/python.prod.Dockerfile
+    container_name: kedo_vpn_celery_worker
+    command: celery -A backend.core worker -l INFO --concurrency=2
+    volumes:
+      - media_volume:/app/backend/media
+    env_file:
+      - ../.env
+    restart: always
+    environment:
+      - PYTHONPATH=/app
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  celery_beat:
+    build:
+      context: ..
+      dockerfile: docker/python.prod.Dockerfile
+    container_name: kedo_vpn_celery_beat
+    command: celery -A backend.core beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    env_file:
+      - ../.env
+    restart: always
+    environment:
+      - PYTHONPATH=/app
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:1.27.5-alpine
+    container_name: kedo_vpn_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/templates/default.conf.template:ro
+      - static_volume:/app/backend/static:ro
+      - media_volume:/app/backend/media:ro
+    env_file: ../.env
+    environment:
+      NGINX_PORT: 80
+      BACKEND_PORT: 8000
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+    depends_on:
+      backend:
+        condition: service_started
+  
+  3xui:
+    image: ghcr.io/mhsanaei/3x-ui:latest
+    container_name: kedo_vpn_3xui
+    restart: always
+    network_mode: "host"
+    volumes:
+      - 3xui_db_data:/etc/x-ui/
+      - ../3x-ui-cert:/root/cert/
+    environment:
+      XUI_ENABLE_FAIL2BAN: "true"
+      XRAY_VMESS_AEAD_FORCED: "false"
+    tty: true
+
+volumes:
+  postgres_data:
+  redis_data:
+  static_volume:
+  media_volume:
+  3xui_db_data:
