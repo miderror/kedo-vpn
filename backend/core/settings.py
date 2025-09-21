@@ -26,6 +26,8 @@ INSTALLED_APPS = [
     "backend.referrals.apps.ReferralsConfig",
     "backend.notifications.apps.NotificationsConfig",
     "backend.content.apps.ContentConfig",
+    "backend.sender.apps.SenderConfig",
+    "backend.dashboard.apps.DashboardConfig",
 ]
 
 MIDDLEWARE = [
@@ -43,7 +45,7 @@ ROOT_URLCONF = "backend.core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -146,11 +148,13 @@ CACHES = {
 }
 
 ADMIN_REORDER = [
+    {"app": "dashboard", "label": "Статистика"},
     {"app": "users", "label": "Пользователи"},
     {"app": "vpn", "label": "VPN и Подписки"},
     {"app": "payments", "label": "Платежи"},
     {"app": "referrals", "label": "Реферальная система"},
     {"app": "notifications", "label": "Уведомления и Правила"},
     {"app": "content", "label": "Настройки и Контент"},
+    {"app": "sender", "label": "Рассылки"},
     {"app": "django_celery_beat", "label": "Планировщик задач (Celery Beat)"},
 ]

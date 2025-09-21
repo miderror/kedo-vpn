@@ -1,0 +1,81 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 2rem;
+    }
+    .dashboard-card {
+        background: var(--module-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+    }
+    .dashboard-card h3 {
+        margin-top: 0;
+        font-size: 1.1rem;
+        color: var(--header-color);
+        border-bottom: 1px solid var(--hairline-color);
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+    .dashboard-card .value {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: var(--link-fg);
+    }
+    .dashboard-card .description {
+        font-size: 0.9rem;
+        color: var(--body-quiet-color);
+        margin-top: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <div class="dashboard-grid">
+        <div class="dashboard-card">
+            <h3>Компания</h3>
+            <div class="value">{{ company_name }}</div>
+            <div class="description">Название проекта</div>
+        </div>
+        <div class="dashboard-card">
+            <h3>Пользователи</h3>
+            <div class="value">{{ total_users }}</div>
+            <div class="description">Всего человек в боте</div>
+        </div>
+        <div class="dashboard-card">
+            <h3>Рефералы</h3>
+            <div class="value">{{ total_referrals }}</div>
+            <div class="description">Всего приглашенных</div>
+        </div>
+        <div class="dashboard-card">
+            <h3>Есть подписка (купл.)</h3>
+            <div class="value">{{ paid_subscription_users }}</div>
+            <div class="description">Активная подписка + был платеж</div>
+        </div>
+         <div class="dashboard-card">
+            <h3>Есть подписка (бонус)</h3>
+            <div class="value">{{ ref_subscription_users }}</div>
+            <div class="description">Активная подписка без платежей</div>
+        </div>
+        <div class="dashboard-card">
+            <h3>Нет подписки</h3>
+            <div class="value">{{ no_subscription_users }}</div>
+            <div class="description">Пользователи с истекшей подпиской</div>
+        </div>
+        <div class="dashboard-card">
+            <h3>Пополнено</h3>
+            <div class="value">{{ total_revenue }}</div>
+            <div class="description">Всего успешных платежей</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
