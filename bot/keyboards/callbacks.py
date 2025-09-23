@@ -23,3 +23,8 @@ class ConnectCallback(CallbackData, prefix="connect"):
     action: str
     show_key: int = 0
     show_instruction: int = 0
+
+
+class BroadcastAdminCallback(CallbackData, prefix="bcast_admin"):
+    action: str
+    broadcast_id: int

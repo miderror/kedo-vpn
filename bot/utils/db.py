@@ -7,6 +7,7 @@ from django.utils import timezone
 from backend.content.models import SiteSettings
 from backend.payments.models import Payment as PaymentModel
 from backend.referrals.tasks import process_referral_bonus_for_payment
+from backend.sender.models import Broadcast
 from backend.users.models import User
 from backend.vpn.models import Subscription, Tariff
 from backend.vpn.tasks import ensure_vpn_client_active_task
@@ -125,3 +126,12 @@ def activate_trial_subscription(subscription_id: int) -> bool:
 def get_support_link():
     settings, _ = SiteSettings.objects.get_or_create(pk=1)
     return settings.support_link
+
+
+@sync_to_async
+def update_broadcast_status_db(broadcast_id: int, status: str):
+    try:
+        Broadcast.objects.filter(pk=broadcast_id).update(status=status)
+        return True
+    except Exception:
+        return False

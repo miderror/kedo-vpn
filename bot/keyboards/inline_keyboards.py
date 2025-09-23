@@ -5,6 +5,7 @@ from backend.vpn.models import Tariff
 from bot.utils.db import get_support_link
 
 from .callbacks import (
+    BroadcastAdminCallback,
     ConnectCallback,
     MenuCallback,
     NotificationCallback,
@@ -26,9 +27,7 @@ async def get_main_menu_kb(user_id: int, bot_username: str):
             text="❗️Подключить", callback_data=MenuCallback(action="connect").pack()
         )
     )
-    builder.row(
-        InlineKeyboardButton(text="🚁 Поддержка", url=support_link)
-    )
+    builder.row(InlineKeyboardButton(text="🚁 Поддержка", url=support_link))
     builder.row(
         InlineKeyboardButton(
             text="⚡️ Заработать", callback_data=MenuCallback(action="earn").pack()
@@ -209,5 +208,23 @@ def get_go_to_subscription_kb():
         text="🕶 Подписка", callback_data=MenuCallback(action="subscription").pack()
     )
     builder.button(text="⬅️ Назад", callback_data=MenuCallback(action="connect").pack())
+    builder.adjust(1)
+    return builder.as_markup()
+
+
+def get_broadcast_approval_kb(broadcast_id: int):
+    builder = InlineKeyboardBuilder()
+    builder.button(
+        text="✅ Отправить всем",
+        callback_data=BroadcastAdminCallback(
+            action="approve", broadcast_id=broadcast_id
+        ).pack(),
+    )
+    builder.button(
+        text="❌ Отклонить",
+        callback_data=BroadcastAdminCallback(
+            action="decline", broadcast_id=broadcast_id
+        ).pack(),
+    )
     builder.adjust(1)
     return builder.as_markup()

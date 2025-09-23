@@ -1,5 +1,6 @@
 from aiogram import Dispatcher
 
+from .admin_actions import router as admin_actions_router
 from .common_actions import router as common_actions_router
 from .connect import router as connect_router
 from .menu import router as menu_router
@@ -16,4 +17,5 @@ def setup_handlers(dp: Dispatcher) -> None:
         referral_router,
         connect_router,
         common_actions_router,
+        admin_actions_router,
     )

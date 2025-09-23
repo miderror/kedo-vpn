@@ -16,3 +16,21 @@ class SiteSettings(models.Model):
     class Meta:
         verbose_name = "Тех. поддержка"
         verbose_name_plural = "Тех. поддержка"
+
+
+class BroadcastSettings(models.Model):
+    broadcast_admin = models.ForeignKey(
+        "users.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Администратор для рассылок (id)",
+        help_text="Пользователь, который будет подтверждать или отклонять рассылки. Если не указан, рассылки не работают.",
+    )
+
+    def __str__(self):
+        return "Админ для рассылок"
+
+    class Meta:
+        verbose_name = "Админ для рассылок"
+        verbose_name_plural = "Админ для рассылок"

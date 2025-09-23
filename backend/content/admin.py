@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from .models import SiteSettings
+from .models import BroadcastSettings, SiteSettings
 
 
 class SingletonModelAdmin(admin.ModelAdmin):
@@ -25,3 +25,11 @@ class SingletonModelAdmin(admin.ModelAdmin):
 @admin.register(SiteSettings)
 class SiteSettingsAdmin(SingletonModelAdmin):
     pass
+
+
+@admin.register(BroadcastSettings)
+class BroadcastSettingsAdmin(SingletonModelAdmin):
+    raw_id_fields = ("broadcast_admin",)
+
+    class Media:
+        css = {"all": ("admin/css/raw_id_fields_fix.css",)}
