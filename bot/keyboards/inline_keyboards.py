@@ -57,9 +57,9 @@ def get_tariffs_kb(tariffs: list[Tariff]):
 
 def get_payment_kb(confirmation_url: str, payment_id_provider: str, tariff_id: int):
     builder = InlineKeyboardBuilder()
-    builder.button(text="Оплатить", url=confirmation_url)
+    builder.button(text="✅ Оплатить", url=confirmation_url)
     builder.button(
-        text="✅ Проверить",
+        text="Подтвердить",
         callback_data=PaymentCallback(
             payment_id=payment_id_provider, tariff_id=tariff_id
         ).pack(),
@@ -95,7 +95,7 @@ def get_dismiss_kb(text: str = "Отлично"):
 def get_subscription_reminder_kb():
     builder = InlineKeyboardBuilder()
     builder.button(
-        text="🕶 Подписка", callback_data=MenuCallback(action="subscription").pack()
+        text="Подписка", callback_data=MenuCallback(action="subscription").pack()
     )
     builder.button(
         text="Отклонить", callback_data=NotificationCallback(action="dismiss").pack()
@@ -109,7 +109,7 @@ def get_earn_kb(referral_link: str):
     builder.row(
         InlineKeyboardButton(
             text="📲 Отправить",
-            switch_inline_query=referral_link,
+            url=referral_link,
         )
     )
     builder.row(
