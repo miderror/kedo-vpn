@@ -78,7 +78,6 @@ async def check_payment_handler(
     is_successful = await check_yookassa_payment(payment_id_provider)
 
     if not is_successful:
-        await callback.message.answer("Оплата еще не прошла или была отменена.")
         return
 
     payment = await get_pending_payment(payment_id_provider)
