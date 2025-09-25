@@ -71,7 +71,7 @@ def send_expiry_reminders():
 
     for rule in active_rules:
         trigger_time_start = now + timedelta(hours=rule.trigger_hours_before_expiry)
-        trigger_time_end = trigger_time_start + timedelta(hours=1)
+        trigger_time_end = trigger_time_start + timedelta(minutes=10)
 
         subscriptions_to_notify = Subscription.objects.filter(
             end_date__range=(trigger_time_start, trigger_time_end)
