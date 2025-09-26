@@ -59,7 +59,7 @@ def get_payment_kb(confirmation_url: str, payment_id_provider: str, tariff_id: i
     builder = InlineKeyboardBuilder()
     builder.button(text="✅ Оплатить", url=confirmation_url)
     builder.button(
-        text="Подтвердить",
+        text="💳 Подтвердить",
         callback_data=PaymentCallback(
             payment_id=payment_id_provider, tariff_id=tariff_id
         ).pack(),

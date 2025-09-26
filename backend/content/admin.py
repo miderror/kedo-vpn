@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from .models import BroadcastSettings, SiteSettings
+from .models import BotTexts, BroadcastSettings, SiteSettings
 
 
 class SingletonModelAdmin(admin.ModelAdmin):
@@ -33,3 +33,8 @@ class BroadcastSettingsAdmin(SingletonModelAdmin):
 
     class Media:
         css = {"all": ("admin/css/raw_id_fields_fix.css",)}
+
+
+@admin.register(BotTexts)
+class BotTextsAdmin(SingletonModelAdmin):
+    pass

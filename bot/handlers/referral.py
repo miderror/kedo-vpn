@@ -5,6 +5,7 @@ from aiogram.types import CallbackQuery
 
 from bot.keyboards.callbacks import MenuCallback
 from bot.keyboards.inline_keyboards import get_earn_kb
+from bot.utils.db import get_bot_texts
 
 router = Router()
 
@@ -19,10 +20,8 @@ async def earn_handler(callback: CallbackQuery, bot: Bot):
     encoded_link = urllib.parse.quote(raw_referral_link, safe="")
     share_url = f"https://t.me/share/url?url={encoded_link}"
 
-    text = (
-        "Отправьте человеку реферальный профиль и заработайте "
-        "от 50 дней на свой лицевой счет от каждой покупки пользователя!"
-    )
+    texts = await get_bot_texts()
+    text = texts.referral_earn_info
 
     keyboard = get_earn_kb(share_url)
 

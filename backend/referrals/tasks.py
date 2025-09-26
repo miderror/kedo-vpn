@@ -25,7 +25,7 @@ async def send_notification_async(telegram_id: int, text: str):
             chat_id=telegram_id,
             text=text,
             parse_mode=ParseMode.HTML,
-            reply_markup=get_dismiss_kb(text="Отлично"),
+            reply_markup=get_dismiss_kb(text="Ок"),
         )
         logger.info(f"Уведомление о реф. бонусе успешно отправлено {telegram_id}")
     except Exception as e:
@@ -39,9 +39,8 @@ async def send_notification_async(telegram_id: int, text: str):
 @shared_task
 def send_bonus_notification_task(referrer_telegram_id: int, bonus_days: int):
     text = (
-        f"<b>Поздравляем!</b> "
-        f"За реферальную активность на ваш лицевой счет начислено "
-        f"<b>{bonus_days}</b> бонусных дней."
+        f"Класс! За реферальную активность на Ваш лицевой счет начислено "
+        f"{bonus_days} бонусных дней."
     )
     asyncio.run(send_notification_async(referrer_telegram_id, text))
 

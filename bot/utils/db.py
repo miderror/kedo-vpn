@@ -4,7 +4,7 @@ from asgiref.sync import sync_to_async
 from django.db import transaction
 from django.utils import timezone
 
-from backend.content.models import SiteSettings
+from backend.content.models import BotTexts, SiteSettings
 from backend.payments.models import Payment as PaymentModel
 from backend.referrals.tasks import process_referral_bonus_for_payment
 from backend.sender.models import Broadcast
@@ -135,3 +135,9 @@ def update_broadcast_status_db(broadcast_id: int, status: str):
         return True
     except Exception:
         return False
+
+
+@sync_to_async
+def get_bot_texts():
+    texts, _ = BotTexts.objects.get_or_create(pk=1)
+    return texts
