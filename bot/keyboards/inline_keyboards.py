@@ -215,13 +215,13 @@ def get_go_to_subscription_kb():
 def get_broadcast_approval_kb(broadcast_id: int):
     builder = InlineKeyboardBuilder()
     builder.button(
-        text="✅ Отправить всем",
+        text="💌 Отправить",
         callback_data=BroadcastAdminCallback(
             action="approve", broadcast_id=broadcast_id
         ).pack(),
     )
     builder.button(
-        text="❌ Отклонить",
+        text="⬅️ Отклонить",
         callback_data=BroadcastAdminCallback(
             action="decline", broadcast_id=broadcast_id
         ).pack(),

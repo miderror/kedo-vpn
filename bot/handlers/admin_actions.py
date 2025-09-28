@@ -19,7 +19,6 @@ async def approve_broadcast_handler(
     start_mass_broadcast_task.delay(callback_data.broadcast_id)
 
     try:
-        await callback.message.answer("🚀 Запускаю рассылку...")
         await callback.message.delete()
     except TelegramBadRequest:
         pass

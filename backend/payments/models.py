@@ -3,8 +3,8 @@ from django.db import models
 
 class Payment(models.Model):
     class Status(models.TextChoices):
-        PENDING = "PENDING", "Ожидает"
         SUCCEEDED = "SUCCEEDED", "Успешно"
+        PENDING = "PENDING", "Ожидает"
         CANCELED = "CANCELED", "Отменен"
 
     user = models.ForeignKey(

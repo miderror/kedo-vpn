@@ -3,7 +3,7 @@ from django.db import models
 
 class User(models.Model):
     telegram_id = models.BigIntegerField(
-        unique=True, primary_key=True, verbose_name="Телеграм ID"
+        unique=True, primary_key=True, verbose_name="Пользователь"
     )
     username = models.CharField(
         max_length=255, null=True, blank=True, verbose_name="Юзернейм"

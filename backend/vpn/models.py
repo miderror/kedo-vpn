@@ -35,11 +35,11 @@ class Subscription(models.Model):
     vless_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     trial_activated = models.BooleanField(
-        default=False, verbose_name="Триал активирован"
+        default=False, verbose_name="2 дня активирован"
     )
 
     total_paid = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0, verbose_name="Всего пополнено"
+        max_digits=10, decimal_places=2, default=0, verbose_name="Пополнено"
     )
 
     is_vpn_client_active = models.BooleanField(default=False, verbose_name="Клиент VPN активен")
