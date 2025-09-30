@@ -58,7 +58,7 @@ def check_and_deactivate_expired_subscriptions():
         sub.is_vpn_client_active = False
         sub.save(update_fields=["is_vpn_client_active"])
 
-        message = "Ваша подписка истекла и ключ профиля конфигурации был удален! После оплаты новой подписки обновите ключ-ссылку!"
+        message = "Обращаем внимание, Ваша подписка закончилась и vpn остановлен! Докупите дней и подписка останется активной!"
         send_telegram_notification_task.delay(
             sub.user.telegram_id, message, with_keyboard=True
         )
