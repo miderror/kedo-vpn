@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.db.models import Sum
+from django.db.models import Q, Sum
 from django.template.response import TemplateResponse
 from django.utils import timezone
 
@@ -44,14 +44,25 @@ class ProjectStatsAdmin(admin.ModelAdmin):
         )
 
         ref_subscription_users = (
-            User.objects.filter(telegram_id__in=active_subscription_user_ids)
-            .exclude(payments__status=Payment.Status.SUCCEEDED)
+            User.objects.filter(
+                telegram_id__in=active_subscription_user_ids,
+                bonuses_given__isnull=False,
+            )
+            .distinct()
             .count()
         )
 
-        total_active_subscriptions = len(active_subscription_user_ids)
+        users_with_real_active_subscription = (
+            User.objects.filter(
+                Q(payments__status=Payment.Status.SUCCEEDED)
+                | Q(bonuses_given__isnull=False),
+                telegram_id__in=active_subscription_user_ids,
+            )
+            .distinct()
+            .count()
+        )
 
-        no_subscription_users = total_users - total_active_subscriptions
+        no_subscription_users = total_users - users_with_real_active_subscription
 
         context = {
             **self.admin_site.each_context(request),
